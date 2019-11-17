@@ -14,7 +14,32 @@ function IsPrime(num) {
 //         .includes(true)
 //     &&
 //     ![0,1].includes(n)
-////
+
+
+//// вывести все простые числа до N
+let a = 100
+
+function getAllPrimes(n) {
+    let arr = []
+    for (let i = 2; i <= n; i++){ arr.push(i )}
+    let set = new Set(arr);
+
+    set.forEach(el => {
+        let tmp = el
+        let i = 2;
+        while (tmp < n) {
+            tmp = el * i
+            set.delete(tmp)
+            i++
+        }
+    })
+
+    return set
+}
+
+console.log(getAllPrimes(a))
+
+///////
 
 
 function Factorial(n) {
@@ -136,26 +161,28 @@ console.log(user + 500); // hint: default -> 1500
 
 ///////////////
 //DEBOUNCING
-function debounce(func, wait, immediate) {
-    var timeout;
+function debounce(func, ms) {
+    let canRun = true;
     return function() {
-        var context = this, args = arguments;
-        var later = function() {
-            timeout = null;
-            if (!immediate) func.apply(context, args);
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-    };
-};
+        if (canRun) {
+            canRun = false;
+            func.apply(this, arguments)
+            setTimeout(() => {
+                canRun = true;
+            }, ms)
+        }
+    }
+}
 
-var myEfficientFn = debounce(function() {
-    // All the taxing stuff you do
-}, 250);
+let f = debounce(console.log, 1000);
 
-window.addEventListener('resize', myEfficientFn);
+f(1); // выполняется немедленно
+f(2); // проигнорирован
+
+setTimeout( () => f(3), 100);  // проигнорирован (прошло только 100 мс)
+setTimeout( () => f(4), 1100);  // выполняется
+setTimeout( () => f(5), 1500);  // проигнорирован
+
 //////////////////////
 
 
@@ -175,16 +202,23 @@ function getMaxSubSum(arr) {
 }
 //////////////////
 
-let arr = ["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares"];
+let arr = ["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares", "biba"];
 
 function anagramClean(arr) {
     let obj = {}
     for (let el of arr){
         let sorted = el.toLowerCase().split("").sort().join("")
-        obj[sorted] = el
+        if (!obj.hasOwnProperty(sorted)) {
+            obj[sorted] = [el]
+        } else {
+            obj[sorted].push(el)
+        }
+
     }
-    return Object
+    return Object.values(obj)
 }
+
+console.log(anagramClean(arr))
 
 
 ///////////////// Генерация скобочных последовательностей
@@ -208,3 +242,281 @@ function f(cnt, ind, k, init) {
 
 
 f(cnt, ind, k, init)
+/////////////////
+function sumClosure(a) {
+
+    let currentSum = a;
+
+    function f(b) {
+        currentSum += b;
+        // console.log(currentSum)
+        return f;
+    }
+
+    f.toString = function() {
+        return currentSum;
+    };
+
+    return f;
+}
+
+let a = +sumClosure(2)(3) ;
+console.log(a)
+/////// односвязный список
+
+let list = {
+    value: 1,
+    next: {
+        value: 2,
+        next: {
+            value: 3,
+            next: {
+                value: 4,
+                next: null
+            }
+        }
+    }
+};
+
+function printList(list) {
+    list.next && printList(list.next)
+    console.log(list.value)
+}
+
+function printListCycle(list) {
+    let tmp = list
+    while (tmp) {
+        console.log(tmp.value)
+        tmp = tmp.next
+    }
+}
+printList(list)
+printListCycle(list)
+
+//////// двусвязный список
+
+function Node(val) {
+    this.data = val;
+    this.prev = null;
+    this.next = null;
+}
+
+function LinkedList() {
+    this.head = null;
+    this.tail = null;
+
+    this.addAtFront = function (val) {
+        if (this.head === null) {  //If first node
+            this.head = new Node(val);
+            this.tail = this.head;
+        } else {
+            var temp = new Node(val);
+            temp.next = this.head;
+            this.head.prev = temp;
+            this.head = temp;
+        }
+    };
+
+    this.addAtEnd = function (val) {
+        if (this.tail === null) {  //If first node
+            this.tail = new Node(val);
+            this.head = this.tail;
+        } else {
+            var temp = new Node(val);
+            temp.prev = this.tail;
+            this.tail.next = temp;
+            this.tail = temp;
+        }
+    };
+
+    this.removeAtHead = function () {
+        var toReturn = null;
+
+        if (this.head !== null) {
+            toReturn = this.head.data;
+
+            if (this.tail === this.head) {
+                this.head = null;
+                this.tail = null;
+            } else {
+                this.head = this.head.next;
+                this.head.prev = null;
+            }
+        }
+        return toReturn;
+    };
+
+    this.removeAtTail = function () {
+        var toReturn = null;
+
+        if (this.tail !== null) {
+            toReturn = this.tail.data;
+
+            if (this.tail === this.head) {
+                this.head = null;
+                this.tail = null;
+            } else {
+                this.tail = this.tail.prev;
+                this.tail.next = null;
+            }
+        }
+
+        return toReturn;
+    };
+
+    this.each = function (f) {
+        var curr = this.head;
+        while (curr !== null) {
+            f(curr);
+            curr = curr.next;
+        }
+    };
+
+    this.printList = function () {
+        this.each(function (item) {
+            console.log(item.data);
+        });
+    };
+}
+
+
+
+var testList = new LinkedList();
+
+var runTests = function () {
+    testList.addAtFront("Second");
+    testList.addAtFront("First");
+    testList.addAtEnd("Third");
+    testList.addAtEnd("Fourth");
+
+    testList.printList();
+
+    testList.removeAtHead();
+    testList.removeAtTail();
+
+    testList.printList();
+
+    testList.removeAtHead();
+    testList.removeAtHead();
+
+    testList.printList();
+
+};
+
+runTests()
+
+////////// Delay decorator
+function f(x) {
+    console.log(x);
+}
+
+function delay(func, timeout) {
+    return function (...args) {
+        setTimeout(() => func.apply(this, args), timeout)
+    }
+}
+
+// создаём обёртки
+let f1000 = delay(f, 1000);
+let f1500 = delay(f, 1500);
+
+f1000("test", 'huy'); // показывает "test" после 1000 мс
+f1500("test2"); // показывает "test" после 1500 мс
+
+
+
+/////////// THROTTLING return last execute
+function f(a) {
+    console.log(a)
+}
+
+function throttle(func, ms) {
+    let canRun = true;
+    let lastArgs;
+    let lastThis;
+    let timer;
+
+    return function() {
+        if (canRun) {
+            func.apply(this, arguments);
+            canRun = false;
+        } else {
+            clearTimeout(timer);
+            lastArgs = arguments
+            lastThis = this
+        }
+        timer = setTimeout(() => {
+            canRun = true;
+            lastArgs && func.apply(lastThis, lastArgs);
+
+            lastArgs = null
+            lastThis = null
+        }, ms)
+    }
+}
+
+// f1000 передаёт вызовы f максимум раз в 1000 мс
+let f1000 = throttle(f, 1000);
+
+f1000(1); // показывает 1
+f1000(2); // (ограничение, 1000 мс ещё нет)
+f1000(3); // (ограничение, 1000 мс ещё нет)
+f1000(4); // (ограничение, 1000 мс ещё нет)
+f1000(5); // (ограничение, 1000 мс ещё нет)
+f1000(6); // (ограничение, 1000 мс ещё нет)
+f1000(7); // (ограничение, 1000 мс ещё нет)
+// когда 1000 мс истекли ...
+// ...выводим 3, промежуточное значение 2 было проигнорировано
+
+
+
+///////////  THROTTLING returns all execs with delay
+function f(a) {
+    console.log(a)
+}
+
+function throttle(func, ms) {
+    let canRun = true;
+    let argsArray = [];
+    let timer;
+
+    return function() {
+        if (canRun) {
+            func.apply(this, arguments);
+            canRun = false;
+        } else {
+            clearTimeout(timer);
+            argsArray.push({
+                arguments,
+                currThis: this
+            })
+        }
+
+        let next = () => {
+            timer = setTimeout(() => {
+                canRun = true;
+                let el = argsArray[0]
+                argsArray.shift()
+
+                if ( el) {
+                    func.apply(el.currThis, el.arguments);
+                    next()
+                }
+            }, ms)
+        }
+        next()
+    }
+}
+
+// f1000 передаёт вызовы f максимум раз в 1000 мс
+let f1000 = throttle(f, 1000);
+
+f1000(1); // показывает 1
+f1000(2); // (ограничение, 1000 мс ещё нет)
+f1000(3); // (ограничение, 1000 мс ещё нет)
+f1000(4); // (ограничение, 1000 мс ещё нет)
+f1000(5); // (ограничение, 1000 мс ещё нет)
+f1000(6); // (ограничение, 1000 мс ещё нет)
+f1000(7); // (ограничение, 1000 мс ещё нет)
+// когда 1000 мс истекли ...
+// ...выводим 3, промежуточное значение 2 было проигнорировано
