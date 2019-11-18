@@ -12,6 +12,7 @@
                     <li>В чем их отличие?</li>
                     <li>Где какие применять?</li>
                     <li>Нейминг переменных?</li>
+                    <li>var и свойства глобального объекта?</li>
                  </ol>
         </li>
         <li>
@@ -57,6 +58,24 @@
                    <li>(...args) остаточные параметры и arguments?</li>
                    <li>() => {} и arguments?</li>
                    <li>(...someprops) –– оператор расширения?</li>
+                   <li>immediately-invoked function expressions (IIFE) ?</li>
+                   <li>Контекстное имя (.name) ?</li>
+                   <li>length ?</li>
+                   <li>Named Function Expression (NFE) ?</li>
+                   <li>new Function([arg1, arg2, ...argN], functionBody)
+                       <ul>
+                           <li>Что передавать в body?</li>
+                           <li>Что записывается в [[Environment]] для таких ф-й?</li>
+                       </ul>
+                   </li>
+                   <li>Функции-декораторы(обертки)?</li>
+                   <li>func.call(context, arg1, arg2, ...)?</li>
+                   <li>func.call(context, ...arguments)?</li>
+                   <li>func.apply(context, arguments)?</li>
+                   <li>«Перенаправление вызова» (call forwarding)?</li>
+                   <li>Заимствование метода –– [].join.call(arguments) ?</li>
+                   <li>func.bind(context, [arg1], [arg2], ...) ?</li>
+                   <li>Фиксация привязки контекста ?</li>
                 </ol>
         </li>
         <li>
@@ -79,6 +98,7 @@
                            <li>Ссылка на внешнее окружение у глобального LexicalEnvironment?</li>
                        </ul>
                    </li>
+                   <li>Блоки кода и циклы ?</li>
                 </ol>
         </li>
         <li>
@@ -97,6 +117,22 @@
                    <li>Object.entries/values/keys/fromEntries?</li>
                    <li>Как сделать односторонний Связный Список?</li>
                    <li>Как сделать двусторонний Связный Список?</li>
+                   <li>Дескриторы:
+                       <ul>
+                           <li>Какие флаги есть?</li>
+                           <li>Как получить?</li>
+                           <li>Как изменить?</li>
+                           <li>Особенности оверрайтинга встроенных функций?</li>
+                           <li>Как работает присваивание с дескрипторами?</li>
+                       </ul>
+                   </li>
+                   <li>Свойства-аксессоры (get, set):
+                      <ul>
+                          <li>delete?</li>
+                          <li>defineProperty?</li>
+                          <li>свойства с _?</li>
+                      </ul>
+                   </li>
                 </ol>
         </li>
         <li>
@@ -105,6 +141,7 @@
                    <li>Что это?</li>
                    <li>Принцип достижимости?</li>
                    <li>Алгоритм сборки мусора mark-and-sweep?</li>
+                   <li>В замыканиях?</li>
                 </ol>
         </li>
         <li>
@@ -228,6 +265,24 @@
                 </ol>
         </li>
         <li>
+            <h4>Браузер </h4>
+                <ol>
+                   <li>globalThis?</li>
+                   <li>Что такое полифил?</li>
+                </ol>
+        </li>
+        <li>
+            <h4>setTimeout | setInterval</h4>
+                <ol>
+                   <li>setTimeout(func | code, [delay], [arg1], [arg2], ...) ?</li>
+                   <li>setInterval(func | code, [delay], [arg1], [arg2], ...) ?</li>
+                   <li>timerId и отмена?</li>
+                   <li>Что можно передать вместо функции ?</li>
+                   <li>Минимальная задержка вложенных таймеров в браузере?</li>
+                   <li>По каким причинам таймер может замедлятся?</li>
+                </ol>
+        </li>
+        <li>
             <h4>Event loop </h4>
                 <ol> 
                    <li>Что такое:
@@ -314,6 +369,19 @@
 <br>
 
 -------
+<h3>Практические функции</h3>
+
+<h4>Декораторы</h4>
+    <ol>
+       <li>Spy</li>
+       <li>Delay</li>
+       <li>Debounce</li>
+       <li>Throttling</li>
+       <li>Каррирование</li>
+    </ol>
+<br>
+
+-------
 <h3>Алгоритмы</h3>
 
 <h4>Рандомизация</h4>
@@ -324,6 +392,7 @@
 <h4>Множества</h4>
     <ol>
        <li>Число сочетаний</li>
+       <li>Решето Эратосфена для простых чисел</li>
     </ol>
 <br>
 

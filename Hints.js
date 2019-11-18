@@ -1,3 +1,4 @@
+'use strict'
 // Hint for _proto_ and prototype
 let a = {}
 a.toString === a._proto_.toString === Object.prototype.toString
