@@ -12,3 +12,15 @@ console.log(func.a) // 1
 let a = 'a';
 String(a).b = 1; // readonly, объект-обертка удаляется после использования
 console.log(a.b) // undefined
+
+const o = {
+    '0': 'zero',
+    '1': 'one'
+};
+[].slice.call(o); // []
+const oo = {
+    '0': 'zero',
+        '1': 'one',
+        length: 2
+};
+[].slice.call(oo); // ["zero", "one"];
