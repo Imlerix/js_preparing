@@ -242,6 +242,8 @@ function f(cnt, ind, k, init) {
 
 
 f(cnt, ind, k, init)
+
+
 /////////////////
 function sumClosure(a) {
 
@@ -520,3 +522,82 @@ f1000(6); // (ограничение, 1000 мс ещё нет)
 f1000(7); // (ограничение, 1000 мс ещё нет)
 // когда 1000 мс истекли ...
 // ...выводим 3, промежуточное значение 2 было проигнорировано
+////////////
+
+function checkBrackets(stroke) {
+    let array = [...stroke]
+    let isCheckable = true;
+    let position = null;
+    let position1 = null;
+    let position2 = null;
+
+    while(isCheckable) {
+        position = stroke.indexOf('()')
+        position1 = stroke.indexOf('[]')
+        position2 = stroke.indexOf('{}')
+
+        function findAndCut(position) {
+            array.splice(position, 2)
+            stroke = array.join("")
+            isCheckable = true
+        }
+
+        if (~position) {
+            findAndCut(position)
+            continue;
+        } else {
+            isCheckable = false
+        }
+
+        if (~position1) {
+            findAndCut(position1)
+            continue;
+        } else {
+            isCheckable = false
+        }
+
+        if (~position2) {
+            findAndCut(position2)
+        } else {
+            isCheckable = false
+        }
+    }
+    console.log(array.join(""))
+    return array.length === 0
+}
+
+console.log(checkBrackets('[{(([]))}([])]'))
+////
+function validParentheses(parens){
+    let n = 0;
+    for (let i = 0; i < parens.length; i++) {
+        if (parens[i] === '(') n++;
+        if (parens[i] === ')') n--;
+        if (n < 0) return false;
+    }
+
+    return n === 0;
+}
+//////////////
+function compressArray(array) {
+    let arrayLcl = array.sort((a, b) => a - b)
+
+    if (arrayLcl.length < 2) return arrayLcl.join();
+
+    let result = "";
+    let startDia = arrayLcl[0];
+    result += startDia;
+    for (let i = 1; i < arrayLcl.length; ++i) {
+        if(arrayLcl[i] - arrayLcl[i - 1] > 1) {
+            if (arrayLcl[i - 1] !== startDia) result += `-${arrayLcl[i-1]}`
+
+            result += `,${arrayLcl[i]}`
+            startDia = arrayLcl[i]
+        }
+        if (i === arrayLcl.length && arrayLcl[i] !== startDia) result += `-${arrayLcl[i]}`
+    }
+    return result
+}
+let arr = [3, 2, 1, 5, 6, -1, 10]
+console.log(compressArray(arr))
+///////////////

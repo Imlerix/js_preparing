@@ -20,7 +20,7 @@ const o = {
 [].slice.call(o); // []
 const oo = {
     '0': 'zero',
-        '1': 'one',
-        length: 2
+    '1': 'one',
+    length: 5
 };
-[].slice.call(oo); // ["zero", "one"];
+[].slice.call(oo); // [ 'zero', 'one', <3 empty items> ];
