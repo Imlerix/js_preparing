@@ -147,7 +147,6 @@ function duplicateCount(text){
 let user = {
     name: "John",
     money: 1000,
-
     [Symbol.toPrimitive](hint) {
         console.log(`hint: ${hint}`);
         return hint == "string" ? `{name: "${this.name}"}` : this.money;
@@ -382,7 +381,6 @@ function LinkedList() {
 }
 
 
-
 var testList = new LinkedList();
 
 var runTests = function () {
@@ -601,3 +599,158 @@ function compressArray(array) {
 let arr = [3, 2, 1, 5, 6, -1, 10]
 console.log(compressArray(arr))
 ///////////////
+// Rfhhbhjdfybt
+function curry(func) {
+
+    return function curried(...args) {
+        if (args.length >= func.length) {
+            return func.apply(this, args);
+        } else {
+            return function(...args2) {
+                return curried.apply(this, args.concat(args2));
+            }
+        }
+    };
+
+}
+////////////////
+Function.prototype.defer = function (ms) {
+    let self = this
+    return function(){
+        setTimeout(() => self.apply(this, arguments), ms)
+    }
+}
+
+console.log('defer0')
+function f(asd) {
+    console.log('defer1 ' + asd)
+}
+f.defer(1000)('хуй')
+////////////////
+
+/**
+ * Необходимо написать функцию, которая на вход принимает урл,
+ * асинхронно ходит по этому урлу GET запросом и возвращает данные (json).
+ * Для получении данных можно использовать $.get или fetch.
+ * Если во время запроса произошла ошибка, то пробовать запросить ещё 5 раз.
+ * Если в итоге информацию получить не удалось, вернуть ошибку "Заданный URL недоступен".
+ */
+function get(url, count = 6) {
+    count--;
+    return fetch(url)
+    // .then((res) => res)
+        .catch((err) => {
+            if (count === 0) {
+                throw new Error('Заданный URL недоступен')
+            } else {
+                return get(url, count)
+            }
+        })
+
+}
+
+get(url)
+    .then(res => console.log(res))
+    .catch(err => console.error(err))
+
+fetch()
+    .catch(err => count === 0 ? throw 'asd' : get(url, count--));
+/////////
+function func () {
+    const promise = new Promise(resolve => {
+        resolve({
+            toA: 2,
+            toB: 1,
+        });
+    });
+
+    return {
+        a: promise.then(res => res.toA),
+        b: promise.then(res => res.toB)
+    }
+}
+//////////////
+// Дана строка (возможно, пустая), состоящая из букв A-Z:
+// // AAAABBBCCXYZDDDDEEEFFFAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBB
+// // Нужно написать функцию RLE, которая на выходе даст строку вида:
+// //     A4B3C2XYZD4E3F3A6B28
+// // И сгенерирует ошибку, если на вход пришла невалидная строка.
+// //     Пояснения:
+// // Если символ встречается 1 раз, он остается без изменений;
+// // Если символ повторяется более 1 раза, к нему добавляется количество повторений.
+
+function RLE(str) {
+    if (typeof str !== "string") return new Error('invalid')
+
+    let result = '';
+    let count = 1;
+    let char;
+    let i = 0;
+
+    for(i; i < str.length; i++) {
+        count = 1
+
+        while(str[i] === char) {
+            count++;
+            i++;
+        }
+        char = str[i]
+
+        result += `${count !== 1 ? count : ''}${i !== str.length ? char : ''}`
+    }
+
+    return result
+}
+
+console.log(RLE('AAAABBBCCXYZDDDDEEEFFFAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBB') === 'A4B3C2XYZD4E3F3A6B28')
+
+///// СВОЙ Promise.all !!!!!!!!!!! ура
+function parallel(funcArray, doneAll) {
+    let results = []
+    const outerPromise = (funcInPromise) => {
+        return new Promise(resolve => {
+            funcInPromise(done(resolve))
+        })
+    }
+    const done = (resolve) => {
+        return (data) => {
+            results.push(data)
+            resolve()
+        }
+    }
+    const promise = funcArray.reduce((prevPromise, func) => {
+        return prevPromise.then(() => outerPromise(func))
+    }, Promise.resolve() );
+
+    promise.then(() => doneAll(results))
+}
+
+var a = function(done) {
+    setTimeout(function() {
+        done('result a');
+    }, 300);
+};
+
+var b = function(done) {
+    setTimeout(function() {
+        done('result b');
+    }, 200);
+};
+
+parallel([a,b], function(results) {
+    console.log(results); // ['result a', 'result b']
+});
+//////////////////
+// палиндром
+function palindrom(str) {
+    let regexp = /\w/gi;
+    const regexped = str.match(regexp).join("").toLocaleLowerCase();
+
+    for (let i = 0; i < regexped.length; i++){
+        const last = regexped[regexped.length - 1 - i]
+        if(i === last) return true;
+        if (regexped[i] !== last) return false;
+    }
+    return true
+}
+/////////////
