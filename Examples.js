@@ -754,3 +754,62 @@ function palindrom(str) {
     return true
 }
 /////////////
+/*
+  Реализовать функцию memoize, которая принимает в качестве аргумента функцию
+  и возвращает мемоизированную функцию-обертку. Эта функция-обертка внутри вызывает
+  переданную в memoize функцию, но при этом кэширует результат и при последующих вызовах
+  с теми же аргументами возвращает результат из кэша.
+  Вторым необязательным аргументом функция memoize принимает таймаут в миллисекундах,
+  в течение которого данные хранятся в кэше.
+/
+
+// Пример:
+// функция, которая реализует какие-то сложные вычисления
+const calculateSometh = () => { / ...some calculations... */ }
+// таймаут - одна секунда
+const cacheTimeout = 1000;
+
+const memoizedCalcualteSometh = memoize(calculateSometh, cacheTimeout);
+
+memoizedCalcualteSometh(1); // вызывает внутри calculateSometh(1) и возвращает результат
+memoizedCalcualteSometh(1); // не вызывает calculateSometh, а возвращает сохраненное значение из кэша
+memoizedCalcualteSometh(2); // вызывает внутри calculateSometh(2), т.к. аргумент изменился
+memoizedCalcualteSometh(1); // не вызывает calculateSometh, по-прежнему из кэша от первого вызова
+// опять вызывает calculateSometh(1), т.к. с момента предыдущего вызова прошло больше одной секунды
+setTimeout(() => memoizedCalcualteSometh(1), 2000)
+
+function memoize(func, ms){
+    let cache = {};
+
+    return function (...args) {
+        const argsStr = args.toString()
+        if (cache[argsStr]) return cache[argsStr]
+
+        cache[argsStr] = func.apply(this, args)
+        if (ms){
+            setTimeout(() => {
+                delete cache[argsStr]
+            }, ms)
+        }
+
+    }
+}
+///////////////
+var moveZeros = function (arr) {
+    let lastPuttedZero = arr.length - 1;
+    if(lastPuttedZero < 0) return arr;
+
+    for(let i = 0; i < arr.length; i++){
+        if(arr[i] === 0 && lastPuttedZero > i){
+            arr.splice(i, 1)
+            arr.push(0)
+            lastPuttedZero--;
+            i--;
+        }
+    }
+
+    return arr;
+}
+
+moveZeros(["a",0,"b","c","d",1,1,3,1,9,0,0,9,0,0,0,0,0,0,0])
+//////////////
