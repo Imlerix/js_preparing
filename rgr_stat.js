@@ -1,11 +1,14 @@
-const dictionary = {
-    1: 'I',
-    5: 'V',
-    10: 'X',
-    1000: 'M',
-    50: 'L',
-    100: 'C',
-    500: 'D',
-}
+// function dirReduc(array) {
+//     if (array.length < 2) return array;
+//
+//     let coordinates = {
+//         x: 0,
+//         y: 0,
+//     }
+//
+//
+// }
+//
+// console.log(dirReduc(["NORTH", "SOUTH", "SOUTH", "EAST", "WEST", "NORTH", "WEST"]));
 
-console.log(Math.floor(8 / 1000))
+console.log(3 ^ 3 ^ 3)

@@ -635,15 +635,14 @@ f.defer(1000)('хуй')
  * Если во время запроса произошла ошибка, то пробовать запросить ещё 5 раз.
  * Если в итоге информацию получить не удалось, вернуть ошибку "Заданный URL недоступен".
  */
-function get(url, count = 6) {
-    count--;
+function get(url, count = 5) {
     return fetch(url)
-    // .then((res) => res)
+    //  .then((res) => res)
         .catch((err) => {
             if (count === 0) {
                 throw new Error('Заданный URL недоступен')
             } else {
-                return get(url, count)
+                return get(url, count--)
             }
         })
 
@@ -653,8 +652,10 @@ get(url)
     .then(res => console.log(res))
     .catch(err => console.error(err))
 
-fetch()
-    .catch(err => count === 0 ? throw 'asd' : get(url, count--));
+function get(url, count = 5) {
+    return fetch()
+            .catch(err => count === 0 ? throw 'asd' : get(url, count--));
+}
 /////////
 function func () {
     const promise = new Promise(resolve => {
@@ -684,7 +685,7 @@ function RLE(str) {
 
     let result = '';
     let count = 1;
-    let char;
+    let char = str.length ? str[0] : undefined;
     let i = 0;
 
     for(i; i < str.length; i++) {
@@ -746,9 +747,9 @@ function palindrom(str) {
     let regexp = /\w/gi;
     const regexped = str.match(regexp).join("").toLocaleLowerCase();
 
-    for (let i = 0; i < regexped.length; i++){
+    for (let i = 0; i < regexped.length; i++) {
         const last = regexped[regexped.length - 1 - i]
-        if(i === last) return true;
+        if (i === last) return true;
         if (regexped[i] !== last) return false;
     }
     return true
@@ -813,3 +814,96 @@ var moveZeros = function (arr) {
 
 moveZeros(["a",0,"b","c","d",1,1,3,1,9,0,0,9,0,0,0,0,0,0,0])
 //////////////
+function convertToRoman(num) {
+    let roman = {
+        M: 1000,
+        CM: 900,
+        D: 500,
+        CD: 400,
+        C: 100,
+        XC: 90,
+        L: 50,
+        XL: 40,
+        X: 10,
+        IX: 9,
+        V: 5,
+        IV: 4,
+        I: 1
+    };
+    let str = '';
+
+    for (let i of Object.keys(roman)) {
+        let q = Math.floor(num / roman[i]);
+        num -= q * roman[i];
+        str += i.repeat(q);
+    }
+
+    return str;
+}
+
+console.log(convertToRoman(11990))
+//////////
+const array1 = [[1,1,1,1,1,1,1],
+    [1,2,2,2,2,2,1],
+    [1,2,3,3,3,2,1],
+    [1,2,3,4,3,2,1],
+    [1,2,3,3,3,2,1],
+    [1,2,2,2,2,2,1],
+    [1,1,1,1,1,1,1],
+]
+
+const array2 = [[ 1, 2, 3, 4, 5],
+    [16,17,18,19, 6],
+    [15,24,25,20, 7],
+    [14,23,22,21, 8],
+    [13,12,11,10, 9]
+]
+
+const array = [[ 1, 2, 3, 4],
+    [12,13,14, 5],
+    [11,16,15, 6],
+    [10, 9, 8, 7]
+]
+
+const array3 = [[1,2,3],
+    [8,9,4],
+    [7,6,5]
+]
+
+function snail(matrix){
+    if (matrix.length < 2) return matrix[0];
+
+    const countSquare = Math.ceil(matrix[0].length / 2);
+    let result = [];
+
+    for (let i = 0; i <= countSquare; i++){
+        for (let j = i; j < matrix[i].length - i; j++){
+            result.push(matrix[i][j]);
+        }
+        for (let r = i + 1; r < matrix.length - i - 1; r++){
+            result.push(matrix[r][matrix[r].length - 1 - i]);
+        }
+        for (let b = matrix[i].length - i - 1; b >= i; b--){
+            result.push(matrix[matrix.length - 1 - i][b]);
+        }
+        for (let l = matrix.length - i - 2; l > i ; l--){
+            result.push(matrix[l][i]);
+        }
+    }
+    if (matrix.length % 2 !== 0) result.pop();
+
+    return result;
+}
+
+function snail_bestPractise(array) {
+    let vector = [];
+    while (array.length) {
+        vector.push(...array.shift());
+        array.map(row => vector.push(row.pop()));
+        array.reverse().map(row => row.reverse());
+    }
+    return vector;
+}
+
+console.log(snail(array))
+/////////

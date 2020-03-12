@@ -121,25 +121,24 @@ function raceSubscriber({results, urlQueue, urls}) {
 function memoizeFetchURL(func, ms) {
     let cache = {};
 
-    return function (id, ...args) {
+    return async function (req, id, ...args) {
         const argsHashed = hashArgs(args);
 
         if (cache[argsHashed]) {
-            cache[argsHashed].key = id;
+            // cache[argsHashed].key = id;
             console.log('cache! ' + "DONE " + args[0].name + " in " + 0 + "ms" + " | " + cache[argsHashed].key );
-            return Promise.resolve(cache[argsHashed]);
+            return cache[argsHashed];
         }
-        return new Promise(async (resolve) => {
-            const result = await func.apply(this, [id, ...args]);
-            cache[argsHashed] = result;
-            resolve(result);
 
-            if (ms){
-                setTimeout(() => {
-                    delete cache[argsHashed];
-                }, ms)
-            }
-        })
+        const result = await func.apply(this, [id, ...args]);
+        cache[argsHashed] = result;
+        if (ms){
+            setTimeout(() => {
+                cache[argsHashed] = null;
+            }, ms)
+        }
+
+        return result;
     }
 }
 
@@ -191,3 +190,50 @@ function checkCircularJSON(mainObj){
 
 // getResults2(["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29"]);
 
+const createBackend = config => {
+    return memoizeFetchURL(fetch, 5000);
+};
+
+const fetchUsersList = createBackend({
+    url: '/users',
+    method: 'GET',
+    // ttl: '1000',
+    cache: {
+        level: ['request', 'instance', 'shared']
+    }
+});
+
+async (req, res) => {
+    const users = fetchUsersList(req);
+
+    const [asd, anotherUsers] = func(req);
+}
+
+async function func(req) {
+    return Promise.all([
+        Promise.resolve(),
+        fetchUsersList(req),
+    ]);
+}
+
+const resolveUsersList = createResolver((req) => {
+    return fetchUsersList(req);
+}, {
+    name: 'resolveUsersList',
+    cache: {
+        level: 'request',
+    },
+});
+
+const resolveConstUsersList = createResolver((req) => {
+    return fetchUsersList(req)
+        .then(users => {
+            dasdsad;
+        });
+}, {
+    name: 'resolveUsersList',
+    cache: {
+        level: 'shared',
+        ttl: 1000000,
+    },
+});
