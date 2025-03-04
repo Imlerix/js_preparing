@@ -1,0 +1,66 @@
+/* 5 
+Отцентрируйте элемент child внутри parent 
+по вертикали и горизонтали несколькими способами */
+
+/* <div class="parent">
+    <div class="child">
+</div> */
+
+/* Дополните css код ниже: */
+.parent {
+  width: 500px;
+  height: 500px;
+}
+.child {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  /* ??? */
+}
+
+/* Ответ: */
+/* flex */
+.parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+
+/* grid */
+.parent {
+  display: grid;
+  place-items: center;
+ }
+
+/* absolute + transform */
+.parent {
+    position: relative;
+}
+.child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* absolute + margin */
+.parent {
+  position: relative;
+}
+.child {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+/* 6 
+Какого цвета будет элемент h1 при следующем css коде: */
+body h1 {
+    color: green;
+}
+html h1 {
+    color: red;
+}
